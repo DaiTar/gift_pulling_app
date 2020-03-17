@@ -18,10 +18,21 @@ class GiftApp(tk.Tk):
         container.columnconfigure(0, weight=1)
         container.rowconfigure(0, weight=1)
 
-        start_frame = ActionFrame(container, self)
-        start_frame.grid(column=0, row=0, sticky="NSEW", pady=50, padx=50)
-        input_frame = InputFrame(container)
-        input_frame.grid(column=0, row=0, sticky="NSEW", pady=30, padx=30)
+        self.frames = dict()
+
+        action_frame = ActionFrame(container, self, lambda: self.show_frame(InputFrame))
+        action_frame.grid(column=0, row=0, sticky="NSEW")
+        input_frame = InputFrame(container, lambda: self.show_frame(ActionFrame))
+        input_frame.grid(column=0, row=0, sticky="NSEW")
+
+        self.frames[ActionFrame] = action_frame
+        self.frames[InputFrame] = input_frame
+
+        self.show_frame(ActionFrame)
+
+    def show_frame(self, container):
+        frame = self.frames[container]
+        frame.tkraise()
 
 
 root = GiftApp()
